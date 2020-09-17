@@ -1,4 +1,39 @@
-pipeline {
+ppeline {
+    options {
+        // set a timeout of 60 minutes for this pipeline
+        timeout(time: 60, unit: 'MINUTES')
+    }
+    agent {
+      node {
+        label 'nodejs'
+      }
+    }
+
+    environment {
+        DEV_PROJECT = "mark-castonguay-books-dev"
+        STAGE_PROJECT = "mark-castonguay-books-stage"
+        APP_GIT_URL = "https://github.com/Mcaston-ux/DO288-apps"
+        NEXUS_SERVER = "http://nexus-common.apps.cluster.domain.example.com/repository/nodejs"
+
+        // DO NOT CHANGE THE GLOBAL VARS BELOW THIS LINE
+        APP_NAME = "books"
+    }
+
+
+    stages {
+
+        stage('NPM Install') {
+            steps {
+                echo '### Installing NPM dependencies ###'
+                sh '''
+                        npm config set registry ${NEXUS_SERVER}
+                        cd books
+                        npm install
+                   '''
+            }
+        }
+"Jenkinsfile" 151L, 5171C                                                                     17,0-1        Top
+ripeline {
     options {
         // set a timeout of 60 minutes for this pipeline
         timeout(time: 60, unit: 'MINUTES')
